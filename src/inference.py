@@ -9,9 +9,9 @@ model = joblib.load("model_train.pkl")
 digits = load_digits()
 X, y = digits.data, digits.target
 
-# Predict
+# Inference
 y_pred = model.predict(X)
 
-# Evaluate
+# Accuracy
 accuracy = accuracy_score(y, y_pred)
 print(f"Inference Accuracy: {accuracy:.4f}")
