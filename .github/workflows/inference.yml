@@ -5,14 +5,19 @@ on: [push]
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+
       - name: Install dependencies
         run: pip install -r requirements.txt
+
       - name: Run Pytest
         env:
           PYTHONPATH: .
@@ -21,18 +26,24 @@ jobs:
   train:
     needs: test
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Run Training
+
+      - name: Run training script
         run: python src/train.py
-      - name: Upload model
-        uses: actions/upload-artifact@v3
+
+      - name: Upload model artifact
+        uses: actions/upload-artifact@v4
         with:
           name: model
           path: model_train.pkl
@@ -40,17 +51,23 @@ jobs:
   inference:
     needs: train
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Download model
-        uses: actions/download-artifact@v3
+
+      - name: Download model artifact
+        uses: actions/download-artifact@v4
         with:
           name: model
-      - name: Run Inference
+
+      - name: Run inference script
         run: python src/inference.py
